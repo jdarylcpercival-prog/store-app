@@ -653,7 +653,13 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('home');
+        $featuredProducts = collect($this->products())
+            ->map(fn ($product, $slug) => array_merge($product, ['slug' => $slug]))
+            ->sortBy('sort_order')
+            ->take(5)
+            ->values();
+
+        return view('home', compact('featuredProducts'));
     }
 
     public function contact()

@@ -137,56 +137,60 @@
             <div class="mx-auto w-full max-w-[1200px]">
                 <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
                     <div>
-                        <h2 class="font-headline text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none">The<br>Registry.</h2>
+                        <h2 class="font-headline text-5xl md:text-7xl font-black italic tracking-tighter uppercase leading-none">Shop<br>Highlights.</h2>
                     </div>
-                    <p class="font-body text-on-surface-variant max-w-sm text-right">Selected high-performance prototypes and new laboratory editions. Engineered for the high-velocity urban mobility environment.</p>
+                    <p class="font-body text-on-surface-variant max-w-sm text-right">Live products from the THREADLAB catalog, surfaced directly from your storefront so the homepage always reflects what customers can actually buy.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-2 auto-rows-[300px]">
-                    <div class="md:col-span-2 lg:col-span-3 lg:row-span-2 bg-surface-container-low group overflow-hidden relative">
-                        <img alt="Premium Outerwear" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKxKMBfbmKxDJdbrCK7aFhjQKVy9f2LipUx-Rb_a33F6PklQv0weHyRE-su6IbJf-CE9E7SIZlb3QNrd-trAxlr9cAd1f3TnaqvVYYiewWXPaHt6Ec4d1aNp2hEk72WUZ1VAsOeXih8_O9vSYnIR9Q1LPRX5G7BfyiEVQlzJSmx0wy1SHl3-ywRwdAAwO6D0zRC-IDevPlSp3DuL4V4KjPlKL9ZCrkK2TAQDyxUSb3BQBxSdlYV8k_55ZHkiNqp4YBvOz0Fg7vGABaXQ">
-                        <div class="absolute bottom-6 left-6 right-6">
-                            <div class="flex justify-between items-end">
-                                <div>
-                                    <span class="bg-secondary text-on-secondary px-2 py-0.5 text-[10px] font-black uppercase mb-2 inline-block">LIMITED EDITION</span>
-                                    <h3 class="font-headline text-3xl font-black italic tracking-tighter uppercase text-white">VOLT SERIES 01</h3>
-                                </div>
-                                <div class="bg-primary-container text-on-primary-container font-headline font-black px-4 py-2 italic text-lg">$128,500</div>
+                @php
+                    $heroProduct = $featuredProducts->first();
+                    $secondaryProducts = $featuredProducts->slice(1);
+                @endphp
+
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                    @if ($heroProduct)
+                        <a href="{{ route('product.show', $heroProduct['slug']) }}" class="group relative overflow-hidden bg-surface-container-low lg:col-span-7">
+                            <div class="aspect-[4/5] overflow-hidden">
+                                <img alt="{{ $heroProduct['name'] }}" class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="{{ $heroProduct['image'] }}">
                             </div>
-                        </div>
-                    </div>
+                            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent p-6 md:p-8">
+                                <div class="mb-3 inline-block bg-secondary px-3 py-1 text-[10px] font-black uppercase tracking-widest text-on-secondary">{{ strtoupper($heroProduct['tag'] ?? 'Featured') }}</div>
+                                <div class="flex items-end justify-between gap-6">
+                                    <div>
+                                        <h3 class="font-headline text-3xl font-black italic uppercase tracking-tighter text-white md:text-5xl">{{ $heroProduct['name'] }}</h3>
+                                        <p class="mt-3 max-w-xl text-sm text-white/70 md:text-base">{{ $heroProduct['description'] }}</p>
+                                    </div>
+                                    <div class="shrink-0 bg-primary-container px-4 py-3 font-headline text-2xl font-black italic text-on-primary-container">&#8369;{{ number_format($heroProduct['price']) }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    @endif
 
-                    <div class="md:col-span-2 lg:col-span-3 bg-surface-container-low group overflow-hidden relative">
-                        <img alt="Kinetic Footwear" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiRE5lVS_XiflUlz1Nsje0P_u93ruVgnAdv0ZtrL360rs7ADRIQldDnA61fu-iZDQGewZCBue7y28iyRe9U6GGpha693VdJV0HFXPQnQMM8x48bes1AXeA0GyQMBv-JfOOq78vIK1BwtPEmgNjb2OZXQaZitEXQe5eC1KdEEBMqKlBDCQbfUAKVK50zM4g3nZy1c_E95LBu9NrlGCKY_jnfaCDxDbtTGLVBiZ1b5xonmxn8qw7UpjuBBd190WBm85f1yPTotYHSEVAcg">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                        <div class="absolute bottom-4 left-4 right-4 flex justify-between items-center">
-                            <h3 class="font-headline text-xl font-black italic tracking-tighter uppercase text-white">LAB SEDAN</h3>
-                            <div class="text-primary-container font-headline font-black">$72,500</div>
-                        </div>
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:col-span-5">
+                        @foreach ($secondaryProducts as $product)
+                            <a href="{{ route('product.show', $product['slug']) }}" class="group overflow-hidden bg-surface-container-low">
+                                <div class="aspect-[4/5] overflow-hidden">
+                                    <img alt="{{ $product['name'] }}" class="h-full w-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0" src="{{ $product['image'] }}">
+                                </div>
+                                <div class="space-y-3 p-5">
+                                    <div class="flex items-start justify-between gap-4">
+                                        <div>
+                                            <p class="mb-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary-container">{{ strtoupper($product['eyebrow'] ?? 'THREADLAB') }}</p>
+                                            <h3 class="font-headline text-2xl font-black italic uppercase tracking-tighter text-white">{{ $product['name'] }}</h3>
+                                        </div>
+                                        <div class="font-headline text-xl font-black italic text-primary-container">&#8369;{{ number_format($product['price']) }}</div>
+                                    </div>
+                                    <p class="text-sm text-on-surface-variant">{{ $product['description'] }}</p>
+                                </div>
+                            </a>
+                        @endforeach
                     </div>
+                </div>
 
-                    <div class="md:col-span-2 lg:col-span-2 bg-surface-container-low group overflow-hidden relative">
-                        <img alt="Oversized Essential" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0axV64fP6hSa7oOgdNGRnzs2uWm36D5QAr_xd4moFM_J5q_0FkCnP_5ZtoTKV2tEXCdkuVdMio0qqcC3nSDNp-sgvMg82mE6RNUG3BwOV27M3a5_BSPMba4e1O9A3SWq_vULwIu5SaoGiObbCKtwpS_tNMLy-WEpOxujzmRuiQT93BhxjYyLBlmQhXNRpwCofeaF9VaHvL6YrUgnCJhyuYVSaNTj7O9VASPx_fIIUVxof9lOQSWjg73YvDzCabsbLnYEM28oSmSFtTA">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="font-headline text-xl font-black italic tracking-tighter uppercase text-white">LAB SEDAN</h3>
-                            <div class="text-primary-container font-headline font-black">$72,500</div>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2 lg:col-span-2 bg-surface-container-low group overflow-hidden relative">
-                        <img alt="Technical Pants" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn0HO_ADU1roRsOBgF89a7iR7BGlMnW5YjuqQ-0b4HMSJDrr_DqIprmaJvYgp_OuFLgxkSNMUyU92t3DtB27Vi1UTYjlW7_cjPVBuDOfdu8PxXMk7Zp7w5Hve5zLZJBfw6B4RcEzUeIjd-uYLwL-kMezduTVcx0fczZb9sytS5tNHn05kd9J6goIK6IUl9wgMawNo6fWHOBd4EaFBZhy-KjYeZg2BT2n_Zkczez9wszdJACSzX_xhywfnOQizvHUAt5yNvBfLCCzhTAw">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="font-headline text-xl font-black italic tracking-tighter uppercase text-white">CYBER COUPE</h3>
-                            <div class="text-primary-container font-headline font-black">$110,000</div>
-                        </div>
-                    </div>
-
-                    <div class="md:col-span-2 lg:col-span-2 bg-surface-container-low group overflow-hidden relative">
-                        <img alt="Knitwear Accessory" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB83QYVN846z8pA_0HHRCgLC0q2DtilJ1u6geZrSmxXChRejdDWPoABtfAvS_AP9PBWfVx-8xHB-hDR3XveLXxGfQsrnb2uDuJngu7DEfLWkRcXz019q6XQ5ydY4KlpT4uaFPWKrXLu_CLZlBNlu3u-3Lj6VVMH14Rt5gfj3X4Na2vqsFwh8tIV0N4d13iBr4UuNjPwuc5-OHIBub_jzNwsn8JEHzzPBsaJMCwWrDk6Tu-Zu1puTQOi33j-1pMJ_MQFr0Jr-x2ScjJG7A">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="font-headline text-xl font-black italic tracking-tighter uppercase text-white">NOMAD SUV</h3>
-                            <div class="text-primary-container font-headline font-black">$95,000</div>
-                        </div>
-                    </div>
+                <div class="mt-12 flex justify-end">
+                    <a href="{{ route('shop') }}" class="inline-flex items-center gap-2 border border-white/10 bg-surface-container-high px-6 py-4 font-headline text-xs font-black uppercase tracking-[0.25em] text-white transition-colors hover:border-primary-container hover:text-primary-container">
+                        View All Products
+                        <span class="material-symbols-outlined text-base">arrow_forward</span>
+                    </a>
                 </div>
             </div>
         </section>
