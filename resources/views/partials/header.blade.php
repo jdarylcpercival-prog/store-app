@@ -1,42 +1,11 @@
 @php
     $isHome = request()->routeIs('home');
     $isShop = request()->routeIs('shop') || request()->routeIs('product.show');
-    $currentCustomer = session('customer');
-    $accountsPath = storage_path('app/customer_accounts.json');
-    $customerAccounts = file_exists($accountsPath) ? json_decode(file_get_contents($accountsPath), true) : [];
-    $customerAccounts = is_array($customerAccounts) ? $customerAccounts : [];
-
-    if ($currentCustomer) {
-        $sessionCustomerKey = strtolower($currentCustomer['email'] ?? '');
-
-        if ($sessionCustomerKey === '' || ! isset($customerAccounts[$sessionCustomerKey])) {
-            $currentCustomer = null;
-        }
-    }
-
-    if (! $currentCustomer) {
-        $rememberValue = request()->cookie('threadlab_remember');
-
-        if (is_string($rememberValue) && str_contains($rememberValue, '|')) {
-            [$rememberEmail, $rememberToken] = explode('|', $rememberValue, 2);
-            $rememberAccount = $customerAccounts[strtolower($rememberEmail)] ?? null;
-
-            if ($rememberAccount && ! empty($rememberAccount['remember_token']) && hash_equals($rememberAccount['remember_token'], $rememberToken)) {
-                $currentCustomer = [
-                    'full_name' => $rememberAccount['full_name'],
-                    'email' => $rememberAccount['email'],
-                    'member_since' => $rememberAccount['member_since'],
-                ];
-            }
-        }
-    }
-
-    $customerKey = $currentCustomer ? strtolower($currentCustomer['email']) : null;
-    $activeCart = $customerKey ? ($customerAccounts[$customerKey]['cart'] ?? []) : session('guest_cart', []);
-    $cartItems = array_values($activeCart);
-    $cartCount = collect($cartItems)->sum('quantity');
-    $cartSubtotal = collect($cartItems)->sum(fn ($item) => $item['price'] * $item['quantity']);
-    $accountRoute = $currentCustomer ? route('dashboard') : route('customer.login');
+    $currentCustomer = $headerCurrentCustomer ?? null;
+    $cartItems = $headerCartItems ?? [];
+    $cartCount = $headerCartCount ?? 0;
+    $cartSubtotal = $headerCartSubtotal ?? 0;
+    $accountRoute = $headerAccountRoute ?? route('customer.login');
 @endphp
 
 <nav class="fixed top-0 w-full z-50 bg-[#0e0e0e]/80 backdrop-blur-xl border-b border-[#484847]/20">
