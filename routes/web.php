@@ -1,0 +1,41 @@
+<?php
+
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
+Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.show');
+Route::post('/cart/add/{slug}', [HomeController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/update/{key}', [HomeController::class, 'updateCartQuantity'])->name('cart.update');
+Route::post('/cart/remove/{key}', [HomeController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart', [HomeController::class, 'cart'])->name('cart');
+Route::get('/checkout', [HomeController::class, 'checkout'])->name('checkout');
+Route::post('/checkout/profile-sync', [HomeController::class, 'autosaveCheckoutProfile'])->name('checkout.profile.sync');
+Route::post('/checkout/complete', [HomeController::class, 'completeCheckout'])->name('checkout.complete');
+Route::get('/order-success', [HomeController::class, 'orderSuccess'])->name('order.success');
+Route::get('/login', [HomeController::class, 'customerLogin'])->name('customer.login');
+Route::post('/login', [HomeController::class, 'customerLoginSubmit'])->name('customer.login.submit');
+Route::get('/register', [HomeController::class, 'customerRegister'])->name('customer.register');
+Route::post('/register', [HomeController::class, 'customerRegisterSubmit'])->name('customer.register.submit');
+Route::get('/dashboard', [HomeController::class, 'dashboard'])->name('dashboard');
+Route::post('/dashboard/account', [HomeController::class, 'updateAccount'])->name('dashboard.account.update');
+Route::post('/logout', [HomeController::class, 'customerLogout'])->name('customer.logout');
+Route::get('/admin/login', [HomeController::class, 'adminLogin'])->name('admin.login');
+Route::post('/admin/login', [HomeController::class, 'adminLoginSubmit'])->name('admin.login.submit');
+Route::get('/admin/register', [HomeController::class, 'adminRegister'])->name('admin.register');
+Route::post('/admin/register', [HomeController::class, 'adminRegisterSubmit'])->name('admin.register.submit');
+Route::get('/admin/dashboard', [HomeController::class, 'adminDashboard'])->name('admin.dashboard');
+Route::get('/admin/analytics', [HomeController::class, 'adminAnalytics'])->name('admin.analytics');
+Route::get('/admin/products', [HomeController::class, 'adminProducts'])->name('admin.products.index');
+Route::get('/admin/products/create', [HomeController::class, 'adminCreateProduct'])->name('admin.products.create');
+Route::post('/admin/products', [HomeController::class, 'adminStoreProduct'])->name('admin.products.store');
+Route::get('/admin/products/{slug}/edit', [HomeController::class, 'adminEditProduct'])->name('admin.products.edit');
+Route::post('/admin/products/{slug}', [HomeController::class, 'adminUpdateProduct'])->name('admin.products.update');
+Route::post('/admin/products/{slug}/delete', [HomeController::class, 'adminDeleteProduct'])->name('admin.products.delete');
+Route::get('/admin/transactions', [HomeController::class, 'adminTransactions'])->name('admin.transactions');
+Route::get('/admin/system-logs', [HomeController::class, 'adminSystemLogs'])->name('admin.system-logs');
+Route::post('/admin/orders/{reference}/status', [HomeController::class, 'updateAdminOrderStatus'])->name('admin.orders.status');
+Route::post('/admin/logout', [HomeController::class, 'adminLogout'])->name('admin.logout');
+Route::post('/generate', [HomeController::class, 'generate'])->name('generate');
